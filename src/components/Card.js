@@ -1,4 +1,3 @@
-
 function Card({shoes, i}) {
     return(
         <div className='col-md-4'>

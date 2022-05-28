@@ -1,8 +1,14 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 
 function Detail({ shoes }) {
-
+    let [alert ,setAlert] = useState(true);
+    // mount, update 때 실행이 됨
+    useEffect(() => {
+        setTimeout(() => {setAlert(false)}, 2000);
+    })
+    
     let {id} = useParams();
     let findPro = shoes.find(x => x.id == id);
 
@@ -19,10 +25,17 @@ function Detail({ shoes }) {
                 <button className="btn btn-danger">주문하기</button> 
             </div>
         </div>
-    </div> 
+        {
+            alert === true ?
+            <div style={{backgroundColor: 'yellow'}}>2초 안에 누르면 구매 쌉가능</div>
+            : null
+        }
+    </div>
     )
 }
 
 export default Detail;
 
 // 상품 id 값으로 상품 보여주기
+// Detail 페이지에 노란색 박스를 만들고, 2초 후에 사라지게 하기
+// 동적인 ui는 useState로 관리하고, 2초 후에 사라지게 하는 조건문
