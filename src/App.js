@@ -4,12 +4,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navbar, Nav, Container} from 'react-bootstrap';
 import './App.css';
 
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom';
 
 import data from './data.js';
 import Card from './components/Card.js';
-import Detail from './routes/Detail';
+import Detail from './routes/Detail.js';
+import Cart from './components/Cart.js';
+
+// context를 하나 만들어준다. 보관함을 만들어준다
+// 내가 state 공유를 원하는 컴포넌트를 감싸면 된다. 
+// export let Context1 = createContext(); 
 
 function App() {
 
@@ -21,9 +26,12 @@ function App() {
     .catch(() => {
       alert('Error');
     })
+
+  // 원래는 서버뢍 문자만 주고받을 수 있습니다
   }, [])
 
   let [shoes] = useState(data);
+  let [stock, setStock] = useState([10, 11, 12]);
   let [getData, setGetdata] = useState();
   let navigate = useNavigate();
 
@@ -55,7 +63,7 @@ function App() {
           </div>
           <div>
             {
-              getData.map((a, i) => {
+              getData && getData.map((a, i) => {
                 return (
                   <>
                     <span>{getData[i].title}</span>
@@ -67,15 +75,16 @@ function App() {
             }
           </div>
         </div>
-        {/* <button onClick={()=>{
-          axios.get('https://codingapple1.github.io/shop/data2.json')
-          .then((result) => {console.log(result.data)})
-          .catch(()=>{console.log('요청실패')})
-        }}>버튼</button> */}
         </>
       }/>
 
-      <Route path='/detail/:id' element={<Detail shoes={shoes}/>}/> 
+      <Route path='/detail/:id' element={
+        // <Context1.Provider value={{stock}}>
+          <Detail shoes={shoes}/>
+        // </Context1.Provider>
+      }/> 
+
+      <Route path='/cart' element={<Cart />}/>
 
       <Route path='*' element={<div>Page Not Found</div>}/>
     </Routes>
@@ -88,5 +97,5 @@ function App() {
 export default App;
 
 
-// 데이터 가져와서 html로 보여주기
+// 데이터 가져와서 html로 보여주기 -> shoes state에 데이터를 추가하는 방법
 // mock 서버, fake 서버, reqres
